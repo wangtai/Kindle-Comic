@@ -1,0 +1,9 @@
+网上很多漫画都是两页一张图片的，用Kindle看的时候要左右移动很不方便，这个脚本可以把漫画裁剪成适合Kindle看的大小方便放到Kindle中阅读。
+
+特点：
+可以输入漫画目录和zip包，
+支持左右两种方向阅读的漫画，
+支持打包成zip
+
+github地址：
+https://github.com/wangtai/Kindle-Comic/blob/master/kindle_comic.bash
