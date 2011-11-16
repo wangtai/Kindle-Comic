@@ -65,13 +65,17 @@ split_comic(){
             rm $i -f #删除原始图片
         fi
     done
+    cd -
     
     #输出漫画包的格式
     case "$TARGET_TYPE" in
         "zip") #压缩成一个zip文件，方便放到Kindle中
             zip_file_name="${DIR%\/}.kindle.zip"
             test "$zip_file_name" = ".kindle.zip" && zip_file_name="/compress.kindle.zip"
-            zip  -0  $zip_file_name ./* ;
+            _pwd="$PWD"
+            cd $DIR
+            test "${zip_file_name:0:1}" != "/" && zip_file_name="${_pwd}/${zip_file_name}"
+            ls | zip  -0 "${zip_file_name}" -@;
             cd -
             rm -rf $DIR
             echo "$zip_file_name"
@@ -99,6 +103,7 @@ main() {
     echo "DONOT PRESS Ctrl-C"
     touch .split_comic_tag    
     { 
+        #split_comic 
         split_comic > /dev/null
     }&
     process_bar 
