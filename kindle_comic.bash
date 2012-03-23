@@ -22,10 +22,22 @@ do
             file_type="`file $OPTARG`"
             if [ `expr match "$file_type" ".*Zip archive data.*"` -gt 0 ]; then 
                 dir_path="${OPTARG%\.zip}"
+                mkdir -p $dir_path".tmp"
+                unzip -x $OPTARG -d $dir_path".tmp" > /dev/null
                 mkdir -p $dir_path
-                unzip -x $OPTARG -d $dir_path > /dev/null
+                find $dir_path".tmp" -type f -exec mv {} $dir_path \;
+                rm -r $dir_path".tmp"
                 DIR="$dir_path"
-                
+                continue;
+            fi
+            if [ `expr match "$file_type" ".*RAR archive data,.*"` -gt 0 ]; then 
+                dir_path="${OPTARG%\.rar}"
+                mkdir -p $dir_path".tmp"
+                unrar x $OPTARG $dir_path".tmp" > /dev/null
+                mkdir -p $dir_path
+                find $dir_path".tmp" -type f -exec mv {} $dir_path \;
+                rm -r $dir_path".tmp"
+                DIR="$dir_path"
                 continue;
             fi
             echo "Unknown dir $OPTARG" 
@@ -103,7 +115,6 @@ main() {
     echo "DONOT PRESS Ctrl-C"
     touch .split_comic_tag    
     { 
-        #split_comic 
         split_comic > /dev/null
     }&
     process_bar 
